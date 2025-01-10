@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  phidata:
+    build:
+      context: .
+      dockerfile: Dockerfile-mine
+    image: phidata:latest
+    container_name: phidata
+    volumes:
+      - phidata-storage:/app/storage
+    ports:
+      - :7777
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PHI_WORKSPACE_NAME=${PHI_WORKSPACE_NAME:-local}
+      - PHI_STORAGE_PATH=/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7777/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  phidata-storage: 
