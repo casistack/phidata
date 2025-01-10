@@ -15,12 +15,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     nano \
     iputils-ping \
+    python3-dev \
+    libpq-dev \
+    poppler-utils \
+    tesseract-ocr \
+    libreoffice \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
 COPY requirements.txt pyproject.toml ./
 RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir "fastapi[all]" "uvicorn[standard]"
+    pip install --no-cache-dir "fastapi[all]" "uvicorn[standard]" \
+    python-docx \
+    python-pptx \
+    pypdf \
+    pandas \
+    openpyxl \
+    python-multipart \
+    pdfminer.six \
+    pytesseract \
+    pdf2image \
+    docx2txt
 
 # Copy the rest of the application
 COPY . .
