@@ -10,7 +10,7 @@ services:
     volumes:
       - phidata-storage:/app/storage
     ports:
-      - :7777
+      - 7777:7777
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PHI_WORKSPACE_NAME=${PHI_WORKSPACE_NAME:-local}
