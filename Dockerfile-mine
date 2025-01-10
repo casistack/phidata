@@ -47,8 +47,8 @@ RUN pip install -e ".[server]"
 # Expose ports for the UI
 EXPOSE 7777
 
-# Create a playground file
-RUN echo 'from phi.playground import Playground\nfrom phi.agent import Agent\nfrom phi.model.openai import OpenAIChat\n\nagent = Agent(model=OpenAIChat())\napp = Playground(agents=[agent]).get_app()\n' > playground_app.py
+# Create a playground file with health check
+RUN echo 'from fastapi import FastAPI\nfrom phi.playground import Playground\nfrom phi.agent import Agent\nfrom phi.model.openai import OpenAIChat\n\n# Create base FastAPI app\napp = FastAPI()\n\n# Add health check endpoint\n@app.get("/health")\ndef health_check():\n    return {"status": "healthy"}\n\n# Create and setup agent playground\nagent = Agent(model=OpenAIChat())\nplayground = Playground(agents=[agent])\n\n# Include playground routes\napp.include_router(playground.get_router(), prefix="/v1")\n' > playground_app.py
 
 # Command to run the playground with uvicorn
 CMD ["uvicorn", "playground_app:app", "--host", "0.0.0.0", "--port", "7777"] 
