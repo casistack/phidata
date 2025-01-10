@@ -35,7 +35,8 @@ RUN pip install --no-cache-dir -r requirements.txt && \
     pdfminer.six \
     pytesseract \
     pdf2image \
-    docx2txt
+    docx2txt \
+    openai
 
 # Copy the rest of the application
 COPY . .
