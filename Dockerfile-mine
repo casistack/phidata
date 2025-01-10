@@ -12,6 +12,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     git \
+    curl \
+    nano \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -27,5 +30,8 @@ RUN pip install -e .
 # Expose ports for the UI
 EXPOSE 7777
 
+# Create a playground file
+RUN echo 'from phi.playground import Playground\nfrom phi.agent import Agent\nfrom phi.model.openai import OpenAIChat\n\nagent = Agent(model=OpenAIChat())\napp = Playground(agents=[agent]).get_app()\n' > playground_app.py
+
 # Command to run the playground
-CMD ["python", "-m", "phi.cli", "playground"] 
+CMD ["python", "playground_app.py"] 
